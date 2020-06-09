@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g
+from flask import Flask, render_template, g, request
 import sqlite3
 
 app = Flask(__name__)
@@ -6,7 +6,7 @@ app = Flask(__name__)
 # CONNECTING OUT DATABASE
 
 def connect_db():
-    sql = sqlite3.connect('/mnt/c/Users/antho/Documents/data.db')
+    sql = sqlite3.connect('food_log.db')
     sql.row_factory = sqlite3.Row # Results will be returned as Dictionary's instead of Tuples
     return sql
 
@@ -32,8 +32,11 @@ def view():
 	return render_template('day.html')
 
 
-@app.route('/food')
+@app.route('/food', methods=['GET', 'POST'])
 def food():
+	if request.method == 'POST':
+		return '<h1>Name: {} Protein: {} Carbs: {} Fat: {}'.format(request.form['food-name'], #Line Beeak \
+			request.form['protein'], request.form['carbohydrates'], request.form['fat'])
 	return render_template('add_food.html')
 
 
