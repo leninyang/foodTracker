@@ -34,10 +34,25 @@ def view():
 
 @app.route('/food', methods=['GET', 'POST'])
 def food():
-	if request.method == 'POST':
-		return '<h1>Name: {} Protein: {} Carbs: {} Fat: {}'.format(request.form['food-name'], #Line Beeak \
-			request.form['protein'], request.form['carbohydrates'], request.form['fat'])
-	return render_template('add_food.html')
+    if request.method == 'POST':
+    	# Creating the variables for each input value
+        name = request.form['food-name']
+        protein = int(request.form['protein'])
+        carbohydrates = int(request.form['carbohydrates'])
+        fat = int(request.form['fat'])
+
+        # Calculates calories from the input values
+        calories = protein * 4 + carbohydrates * 4 + fat * 9
+
+        # Initialize DB
+        db = get_db()
+        # Add values | Insert into food table | List of values
+        db.execute('insert into food (name, protein, carbohydrates, fat, calories) values (?, ?, ?, ?, ?)', \
+            [name, protein, carbohydrates, fat, calories])
+        # Commit the insert
+        db.commit()
+
+    return render_template('add_food.html')
 
 
 
