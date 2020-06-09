@@ -25,7 +25,27 @@ def close_db(error):
 # Home Route
 @app.route('/')
 def index():
-	return render_template('home.html')
+    db = get_db()
+# =====================================
+    # INSERTING DATES INTO DB
+# =====================================
+    if request.method == 'POST':
+        date = request.form['date'] #assuming the date is in YYYY-MM-DD format
+
+        # Now that we have the date we're going to:
+        # Create it into a datetime object | We parse the string(pass in the date, format)
+        dt = datetime.strptime(date, '%Y-%m-%d')
+        # Creating the database string w/ new format
+        database_date = datetime.strftime(dt, '%Y%m%d')
+
+        db.execute('insert into log_date (entry_date) values (?)', [database_date])
+        db.commit()
+
+    # Query to retrieve dates
+    cur = db.execute('insert into log_date (entry_date) values (?)' [database])
+    db.commit()
+
+    return render_template('home.html')
 
 @app.route('/view')
 def view():
@@ -35,7 +55,9 @@ def view():
 @app.route('/food', methods=['GET', 'POST'])
 def food():
     db = get_db()
-
+# =====================================
+	# INSERTING FOOD INTO OUR DB
+# =====================================
     # Creating the variables for each input value
     if request.method == 'POST':
         name = request.form['food-name']
