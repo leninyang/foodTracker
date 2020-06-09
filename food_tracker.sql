@@ -1,4 +1,4 @@
-#File that creates the tables | 3 Tables
+#File that creates the tables on our Database 
 
 -- Keeping track of dates
 create table log_date(
